@@ -1,17 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe MessagesController do
-
-  #Delete these examples and add some real ones
-  it "should use MessagesController" do
-    controller.should be_an_instance_of(MessagesController)
-  end
-
-
-  describe "GET 'index'" do
-    it "should be successful" do
-      get 'index'
-      response.should be_success
+  describe "POST /messages" do
+    describe "succsess creating" do
+      it "massage should be saved" do
+        lambda do
+          post :create, :message => { :content => "コンテンツ" }
+        end.should change(Message, :count)
+      end
+      it "render juggernaut prepend content" do
+        controller.should_receive(:render_for_juggernaut)
+        post :create, :message => { :content => "コンテンツ" }
+      end
     end
   end
 end

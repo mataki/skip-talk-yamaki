@@ -1,5 +1,9 @@
 #content
-  %ul
+  %ul#messages
     - @messages.each do |m|
       %li
         =m.content
+  - remote_form_for Message.new do |f|
+    = f.label :content
+    = f.text_field :content
+    = f.submit
