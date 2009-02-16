@@ -9,7 +9,22 @@ describe MessagesController do
         end.should change(Message, :count)
       end
       it "render juggernaut prepend content" do
-        controller.should_receive(:render_for_juggernaut)
+        controller.should_receive(:render).with(:juggernaut).and_yield({"ul#messages" => page_selector = mock("page_id")})
+        page_selector.should_receive(:prepend).with("<li>コンテンツ</li>")
+        controller.stub!(:render)
+        post :create, :message => { :content => "コンテンツ" }
+      end
+    end
+    describe "fail creating" do
+      before do
+        message = stub_model(Message)
+        message.stub!(:save).and_return(false)
+        Message.stub!(:new).and_return(message)
+      end
+      it "render juggernaut alert message" do
+        controller.should_receive(:render).with(:juggernaut).and_yield(page = mock('page'))
+        page.should_receive(:alert).with(/not saved/)
+        controller.stub!(:render)
         post :create, :message => { :content => "コンテンツ" }
       end
     end

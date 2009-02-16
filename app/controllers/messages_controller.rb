@@ -5,9 +5,14 @@ class MessagesController < ApplicationController
 
   def create
     @messages = Message.new(params[:message])
-    @messages.save
-    render :juggernaut do |page|
-      page["ul#messages"].prepend "<li>#{h @messages.content}</li>"
+    if @messages.save
+      render :juggernaut do |page|
+        page["ul#messages"].prepend "<li>#{h @messages.content}</li>"
+      end
+    else
+      render :juggernaut do |page|
+        page.alert("not saved")
+      end
     end
     render :nothing => true
   end
