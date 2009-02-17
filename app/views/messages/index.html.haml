@@ -6,3 +6,10 @@
     = f.label :content
     = f.text_field :content
     = f.submit
+
+  #attendee
+
+:javascript
+  $(function(){
+    setTimeout(function(){$.ajax({dataType:'script', type:'get', url:'#{attendee_room_path(requested_room)}'})}, 3000);
+  });

@@ -1,5 +1,8 @@
 class RoomsController < ApplicationController
   before_filter :login_required
+
+  include RoomsHelper
+
   # GET /rooms
   # GET /rooms.xml
   def index
@@ -83,5 +86,13 @@ class RoomsController < ApplicationController
       format.html { redirect_to(rooms_url) }
       format.xml  { head :ok }
     end
+  end
+
+  def attendee
+    @room = Room.find(params[:id])
+    render :juggernaut => { :type => :send_to_channel, :channel => [@room.id] } do |page|
+      page["div#attendee"].html show_attendee(@room.attendee)
+    end
+    render :nothing => true
   end
 end

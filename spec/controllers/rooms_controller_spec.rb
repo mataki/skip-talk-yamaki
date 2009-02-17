@@ -180,4 +180,14 @@ describe RoomsController do
 
   end
 
+  describe "responding to GET attendee" do
+    it "should render juggeranut update attendee box" do
+      Room.should_receive(:find).with("37").and_return(mock_room)
+      mock_room.should_receive(:attendee).and_return([mock_model(User, :login => "quentin")])
+      controller.should_receive(:render).with(:juggernaut => { :type => :send_to_channel, :channel => [mock_room.id] }).and_yield({"div#attendee" => page_selector = mock("page_selector")})
+      page_selector.should_receive(:html).with(/quentin/)
+      controller.stub!(:render)
+      get :attendee, :id => "37"
+    end
+  end
 end

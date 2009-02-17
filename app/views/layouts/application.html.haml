@@ -7,6 +7,7 @@
     = juggernaut_with_session
   %body
     #head
+      = link_to("SKIP-talk", root_path)
       = render :partial => 'users/user_bar'
     #main
       #content_for_layout= yield
