@@ -190,4 +190,27 @@ describe RoomsController do
       get :attendee, :id => "37"
     end
   end
+
+  describe "responding to GET leave" do
+    before do
+      Room.should_receive(:find).with("37").and_return(mock_room)
+      current_user.stub!(:leave).with([mock_room.id])
+      controller.stub!(:update_attendee_box).with(mock_room)
+    end
+    it "should redirect_to room's show" do
+      get :leave, :id => "37"
+      response.should redirect_to(room_url(mock_room))
+    end
+    it "should leave juggeranut channel" do
+      current_user.should_receive(:leave).with([mock_room.id])
+      get :leave, :id => "37"
+    end
+    it "should update attedee list to user who is in this channel" do
+      controller.should_receive(:update_attendee_box).with(mock_room)
+      get :leave, :id => "37"
+    end
+    def current_user
+      controller.send(:current_user)
+    end
+  end
 end

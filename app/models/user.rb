@@ -22,7 +22,8 @@ class User < ActiveRecord::Base
     write_attribute :login, (value ? value.downcase : nil)
   end
 
-  def email=(value)
-    write_attribute :email, (value ? value.downcase : nil)
+  def leave(room_ids)
+    room_ids = [room_ids] unless room_ids.is_a?(Array)
+    Juggernaut.remove_channels_from_clients [self.id], room_ids
   end
 end

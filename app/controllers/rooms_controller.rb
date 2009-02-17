@@ -90,9 +90,21 @@ class RoomsController < ApplicationController
 
   def attendee
     @room = Room.find(params[:id])
-    render :juggernaut => { :type => :send_to_channel, :channel => [@room.id] } do |page|
-      page["div#attendee"].html show_attendee(@room.attendee)
-    end
+    update_attendee_box @room
     render :nothing => true
+  end
+
+  def leave
+    @room = Room.find(params[:id])
+    current_user.leave([@room.id])
+    update_attendee_box @room
+    redirect_to room_url(@room)
+  end
+
+  protected
+  def update_attendee_box(room)
+    render :juggernaut => { :type => :send_to_channel, :channel => [room.id] } do |page|
+      page["div#attendee"].html show_attendee(room.attendee)
+    end
   end
 end

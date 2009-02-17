@@ -8,7 +8,8 @@
     = f.submit
 
   #attendee
-
+  #links
+    = link_to "leave this room", leave_room_path(requested_room)
 :javascript
   $(function(){
     setTimeout(function(){$.ajax({dataType:'script', type:'get', url:'#{attendee_room_path(requested_room)}'})}, 3000);

@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :rooms, :member => [:attendee] do |room|
+  map.resources :rooms, :member => [:attendee, :leave] do |room|
     room.resources :memberships, :only => [:index, :new, :create, :destroy]
     room.resources :messages, :only => [:index, :create]
   end
