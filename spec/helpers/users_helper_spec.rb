@@ -7,8 +7,8 @@ describe UsersHelper do
   before do
     @user = mock_user
   end
-  
-  describe "if_authorized" do 
+
+  describe "if_authorized" do
     it "yields if authorized" do
       should_receive(:authorized?).with('a','r').and_return(true)
       if_authorized?('a','r'){|action,resource| [action,resource,'hi'] }.should == ['a','r','hi']
@@ -18,7 +18,7 @@ describe UsersHelper do
       if_authorized?('a','r'){ 'hi' }.should be_nil
     end
   end
-  
+
   describe "link_to_user" do
     it "should give an error on a nil user" do
       lambda { link_to_user(nil) }.should raise_error('Invalid user')
@@ -33,14 +33,8 @@ describe UsersHelper do
     it "should use the login as link text with no :content_method specified" do
       link_to_user(@user).should have_tag("a", 'user_name')
     end
-    it "should use the name as link text with :content_method => :name" do
-      link_to_user(@user, :content_method => :name).should have_tag("a", 'U. Surname')
-    end
     it "should use the login as title with no :title_method specified" do
       link_to_user(@user).should have_tag("a[title='user_name']")
-    end
-    it "should use the name as link title with :content_method => :name" do
-      link_to_user(@user, :title_method => :name).should have_tag("a[title='U. Surname']")
     end
     it "should have nickname as a class by default" do
       link_to_user(@user).should have_tag("a.nickname")
@@ -93,14 +87,8 @@ describe UsersHelper do
     it "should use the login as link text with no :content_method specified" do
       link_to_current_user().should have_tag("a", 'user_name')
     end
-    it "should use the name as link text with :content_method => :name" do
-      link_to_current_user(:content_method => :name).should have_tag("a", 'U. Surname')
-    end
     it "should use the login as title with no :title_method specified" do
       link_to_current_user().should have_tag("a[title='user_name']")
-    end
-    it "should use the name as link title with :content_method => :name" do
-      link_to_current_user(:title_method => :name).should have_tag("a[title='U. Surname']")
     end
     it "should have nickname as a class" do
       link_to_current_user().should have_tag("a.nickname")

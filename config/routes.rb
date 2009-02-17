@@ -5,6 +5,8 @@ ActionController::Routing::Routes.draw do |map|
   map.signup '/signup', :controller => 'users', :action => 'new'
   map.resources :users
 
+  map.root :controller => "messages"
+
   map.resource :session
 
   map.resources :messages, :only => [:index, :create]

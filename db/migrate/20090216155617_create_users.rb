@@ -2,6 +2,7 @@ class CreateUsers < ActiveRecord::Migration
   def self.up
     create_table "users", :force => true do |t|
       t.column :login,                     :string, :limit => 40
+      t.column :openid_identifier,         :string
       t.timestamps
       t.column :remember_token,            :string, :limit => 40
       t.column :remember_token_expires_at, :datetime

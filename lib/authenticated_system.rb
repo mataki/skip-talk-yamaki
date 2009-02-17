@@ -9,7 +9,7 @@ module AuthenticatedSystem
     # Accesses the current user from the session.
     # Future calls avoid the database because nil is not equal to false.
     def current_user
-      @current_user ||= (login_from_session || login_from_basic_auth || login_from_cookie) unless @current_user == false
+      @current_user ||= (login_from_session || login_from_cookie) unless @current_user == false
     end
 
     # Store the given user id in the session.
@@ -67,13 +67,6 @@ module AuthenticatedSystem
           store_location
           redirect_to new_session_path
         end
-        # format.any doesn't work in rails version < http://dev.rubyonrails.org/changeset/8987
-        # Add any other API formats here.  (Some browsers, notably IE6, send Accept: */* and trigger 
-        # the 'format.any' block incorrectly. See http://bit.ly/ie6_borken or http://bit.ly/ie6_borken2
-        # for a workaround.)
-        format.any(:json, :xml) do
-          request_http_basic_authentication 'Web Password'
-        end
       end
     end
 
@@ -114,7 +107,7 @@ module AuthenticatedSystem
         self.current_user = User.authenticate(login, password)
       end
     end
-    
+
     #
     # Logout
     #
@@ -149,7 +142,7 @@ module AuthenticatedSystem
       logout_keeping_session!
       reset_session
     end
-    
+
     #
     # Remember_me Tokens
     #
@@ -161,25 +154,25 @@ module AuthenticatedSystem
 
     def valid_remember_cookie?
       return nil unless @current_user
-      (@current_user.remember_token?) && 
+      (@current_user.remember_token?) &&
         (cookies[:auth_token] == @current_user.remember_token)
     end
-    
+
     # Refresh the cookie auth token if it exists, create it otherwise
     def handle_remember_cookie!(new_cookie_flag)
       return unless @current_user
       case
       when valid_remember_cookie? then @current_user.refresh_token # keeping same expiry date
-      when new_cookie_flag        then @current_user.remember_me 
+      when new_cookie_flag        then @current_user.remember_me
       else                             @current_user.forget_me
       end
       send_remember_cookie!
     end
-  
+
     def kill_remember_cookie!
       cookies.delete :auth_token
     end
-    
+
     def send_remember_cookie!
       cookies[:auth_token] = {
         :value   => @current_user.remember_token,

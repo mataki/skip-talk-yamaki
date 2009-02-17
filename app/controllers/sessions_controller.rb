@@ -1,7 +1,6 @@
 # This controller handles the login/logout function of the site.
 class SessionsController < ApplicationController
-  # Be sure to include AuthenticationSystem in Application Controller instead
-  include AuthenticatedSystem
+  before_filter :login_required, :except=> [:new, :create]
 
   # render new.rhtml
   def new
@@ -9,21 +8,10 @@ class SessionsController < ApplicationController
 
   def create
     logout_keeping_session!
-    user = User.authenticate(params[:login], params[:password])
-    if user
-      # Protects against session fixation attacks, causes request forgery
-      # protection if user resubmits an earlier form using back
-      # button. Uncomment if you understand the tradeoffs.
-      # reset_session
-      self.current_user = user
-      new_cookie_flag = (params[:remember_me] == "1")
-      handle_remember_cookie! new_cookie_flag
-      redirect_back_or_default('/')
-      flash[:notice] = "Logged in successfully"
+    if using_open_id?
+      login_with_openid
     else
       note_failed_signin
-      @login       = params[:login]
-      @remember_me = params[:remember_me]
       render :action => 'new'
     end
   end
@@ -37,7 +25,40 @@ class SessionsController < ApplicationController
   protected
   # Track failed login attempts
   def note_failed_signin
-    flash[:error] = "Couldn't log you in as '#{params[:login]}'"
-    logger.warn "Failed login for '#{params[:login]}' from #{request.remote_ip} at #{Time.now.utc}"
+    flash[:error] = "Couldn't log you in as '#{params[:openid_identifier]}'"
+    logger.warn "Failed login for '#{params[:openid_identifier]}' from #{request.remote_ip} at #{Time.now.utc}"
+  end
+
+  def login_with_openid
+    authenticate_with_open_id do |result, openid_identifier|
+      if result.successful?
+        if user = User.find_by_openid_identifier(openid_identifier)
+          successful_login(user)
+        else
+          signup_with_openid(openid_identifier)
+        end
+      else
+        note_failed_signin
+        render :action => 'new'
+      end
+    end
+  end
+
+  def successful_login(user)
+    return_to = session[:return_to]||root_url
+    reset_session
+    self.current_user = user
+    new_cookie_flag = (params[:remember_me] == "1")
+    handle_remember_cookie! new_cookie_flag
+    flash[:notice] ||= "Logged in successfully"
+    redirect_back_or_default(return_to)
+  end
+
+  def signup_with_openid(openid_identifier)
+    session[:openid_identifier] = openid_identifier
+    @user = User.new
+
+    render :template => "users/new"
   end
 end
+

@@ -1,6 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe MessagesController do
+  fixtures :users
+  before do
+    login_as('quentin')
+  end
   describe "POST /messages" do
     describe "succsess creating" do
       it "massage should be saved" do

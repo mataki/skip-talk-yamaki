@@ -14,4 +14,6 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   layout 'application'
+
+  include AuthenticatedSystem
 end
