@@ -2,10 +2,6 @@
 class SessionsController < ApplicationController
   before_filter :login_required, :except=> [:new, :create]
 
-  # render new.rhtml
-  def new
-  end
-
   def create
     logout_keeping_session!
     if using_open_id?
