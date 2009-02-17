@@ -14,7 +14,7 @@ describe MessagesController do
       end
       it "render juggernaut prepend content" do
         controller.should_receive(:render).with(:juggernaut).and_yield({"ul#messages" => page_selector = mock("page_id")})
-        page_selector.should_receive(:prepend).with("<li>コンテンツ</li>")
+        page_selector.should_receive(:prepend).with("<li>quentin: コンテンツ</li>")
         controller.stub!(:render)
         post :create, :message => { :content => "コンテンツ" }
       end

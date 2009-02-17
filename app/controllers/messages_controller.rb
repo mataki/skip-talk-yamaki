@@ -1,15 +1,17 @@
 class MessagesController < ApplicationController
   before_filter :login_required
 
+  include MessagesHelper
+
   def index
     @messages = Message.all
   end
 
   def create
-    @messages = Message.new(params[:message])
+    @messages = Message.new(params[:message].merge(:user => current_user))
     if @messages.save
       render :juggernaut do |page|
-        page["ul#messages"].prepend "<li>#{h @messages.content}</li>"
+        page["ul#messages"].prepend show_message(@messages)
       end
     else
       render :juggernaut do |page|

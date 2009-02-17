@@ -1,8 +1,7 @@
 #content
   %ul#messages
     - @messages.each do |m|
-      %li
-        =m.content
+      = show_message(m)
   - remote_form_for Message.new do |f|
     = f.label :content
     = f.text_field :content
