@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
         page["ul#messages"].prepend show_message(@messages)
       end
     else
-      render :juggernaut do |page|
+      render :juggernaut => { :type => :send_to_client, :client_id => current_user.id } do |page|
         page.alert("not saved")
       end
     end

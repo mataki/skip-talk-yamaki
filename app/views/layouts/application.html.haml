@@ -4,7 +4,7 @@
   %head
     = javascript_include_tag :defaults
     = javascript_include_tag 'json', 'juggernaut/juggernaut', 'juggernaut/jquerynaut', 'juggernaut/swfobject'
-    = juggernaut
+    = juggernaut_with_session
   %body
     #head
       = render :partial => 'users/user_bar'
