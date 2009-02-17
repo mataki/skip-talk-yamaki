@@ -1,6 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe "/messages/index" do
+  before do
+    template.stub!(:requested_room).and_return(stub_model(Room))
+  end
   describe "なにもメッセージがない場合" do
     before(:each) do
       assigns[:messages] = []

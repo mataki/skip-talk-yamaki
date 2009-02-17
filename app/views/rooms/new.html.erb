@@ -1,0 +1,23 @@
+<h1>New room</h1>
+
+<% form_for(@room) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :display_name %><br />
+    <%= f.text_field :display_name %>
+  </p>
+  <p>
+    <%= f.label :protect %><br />
+    <%= f.check_box :protect %>
+  </p>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', rooms_path %>

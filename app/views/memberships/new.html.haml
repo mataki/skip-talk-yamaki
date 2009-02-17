@@ -1,0 +1,13 @@
+%h1
+  New membership
+
+- form_for([requested_room, @membership]) do |f|
+  = f.error_messages
+
+  %p
+    = f.label :user_id
+    = f.text_field :user_id
+  %p
+    = f.submit "Create"
+
+= link_to 'Back', room_memberships_path(requested_room)

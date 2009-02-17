@@ -1,5 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :rooms
+  map.resources :rooms do |room|
+    room.resources :memberships, :only => [:index, :new, :create, :destroy]
+    room.resources :messages, :only => [:index, :create]
+  end
 
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.login '/login', :controller => 'sessions', :action => 'new'
@@ -7,11 +10,9 @@ ActionController::Routing::Routes.draw do |map|
   map.signup '/signup', :controller => 'users', :action => 'new'
   map.resources :users
 
-  map.root :controller => "messages"
-
+  map.root :controller => "rooms"
   map.resource :session
 
-  map.resources :messages, :only => [:index, :create]
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

@@ -1,0 +1,20 @@
+%p
+  %b
+    Name:
+  = h @room.name
+
+%p
+  %b
+    Display name:
+  = h @room.display_name
+
+%p
+  %b
+    Protect:
+  = h @room.protect
+
+= link_to 'Edit', edit_room_path(@room)
+|
+= link_to 'Back', rooms_path
+|
+= link_to 'Memberships', room_memberships_path(@room)

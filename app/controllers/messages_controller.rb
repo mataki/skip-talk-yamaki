@@ -4,13 +4,13 @@ class MessagesController < ApplicationController
   include MessagesHelper
 
   def index
-    @messages = Message.all
+    @messages = requested_room.messages.all
   end
 
   def create
-    @messages = Message.new(params[:message].merge(:user => current_user))
+    @messages = requested_room.messages.build(params[:message].merge(:user => current_user))
     if @messages.save
-      render :juggernaut do |page|
+      render :juggernaut => { :type => :send_to_channel, :channel => [requested_room.id] } do |page|
         page["ul#messages"].prepend show_message(@messages)
       end
     else

@@ -16,4 +16,13 @@ class ApplicationController < ActionController::Base
   layout 'application'
 
   include AuthenticatedSystem
+
+  helper_method :requested_room
+
+  protected
+  def requested_room
+    @room if defined?(@room)
+    @room = Room.find(params[:room_id])
+  end
+
 end

@@ -2,7 +2,7 @@
   %ul#messages
     - @messages.each do |m|
       = show_message(m)
-  - remote_form_for Message.new do |f|
+  - remote_form_for [requested_room, Message.new] do |f|
     = f.label :content
     = f.text_field :content
     = f.submit

@@ -1,0 +1,21 @@
+%h1
+  Listing memberships
+
+%table
+  %tr
+    %th
+      User
+    %th
+      Room
+
+  - for membership in @memberships
+    %tr
+      %td
+        = h membership.user.login
+      %td
+        = h membership.room.display_name
+      %td
+        = link_to 'Destroy', [requested_room, membership], :confirm => 'Are you sure?', :method => :delete
+%br/
+
+= link_to 'New membership', new_room_membership_path(requested_room)
