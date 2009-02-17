@@ -4,7 +4,7 @@ class MessagesController < ApplicationController
   include MessagesHelper
 
   def index
-    @messages = requested_room.messages.all
+    @messages = requested_room.messages
   end
 
   def create

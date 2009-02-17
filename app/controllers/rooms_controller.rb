@@ -6,7 +6,7 @@ class RoomsController < ApplicationController
   # GET /rooms
   # GET /rooms.xml
   def index
-    @rooms = Room.find(:all)
+    @rooms = Room.accessible(current_user)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,7 +17,7 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.xml
   def show
-    @room = Room.find(params[:id])
+    @room = Room.accessible(current_user).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -38,7 +38,7 @@ class RoomsController < ApplicationController
 
   # GET /rooms/1/edit
   def edit
-    @room = Room.find(params[:id])
+    @room = Room.accessible(current_user).find(params[:id])
   end
 
   # POST /rooms
@@ -62,7 +62,7 @@ class RoomsController < ApplicationController
   # PUT /rooms/1
   # PUT /rooms/1.xml
   def update
-    @room = Room.find(params[:id])
+    @room = Room.accessible(current_user).find(params[:id])
 
     respond_to do |format|
       if @room.update_attributes(params[:room])
@@ -79,7 +79,7 @@ class RoomsController < ApplicationController
   # DELETE /rooms/1
   # DELETE /rooms/1.xml
   def destroy
-    @room = Room.find(params[:id])
+    @room = Room.accessible(current_user).find(params[:id])
     @room.destroy
 
     respond_to do |format|
@@ -89,13 +89,13 @@ class RoomsController < ApplicationController
   end
 
   def attendee
-    @room = Room.find(params[:id])
+    @room = Room.accessible(current_user).find(params[:id])
     update_attendee_box @room
     render :nothing => true
   end
 
   def leave
-    @room = Room.find(params[:id])
+    @room = Room.accessible(current_user).find(params[:id])
     current_user.leave([@room.id])
     update_attendee_box @room
     redirect_to room_url(@room)

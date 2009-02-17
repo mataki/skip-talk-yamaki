@@ -4,6 +4,7 @@ describe MessagesController do
   fixtures :users, :rooms
   before do
     login_as('quentin')
+    controller.stub!(:requested_room).and_return(rooms(:one))
   end
   describe "POST /messages" do
     describe "succsess creating" do

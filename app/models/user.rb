@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   include Authentication::ByCookieToken
 
   has_many :memberships
+  has_many :rooms, :through => :memberships
 
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
