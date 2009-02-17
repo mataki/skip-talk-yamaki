@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :login_required, :except => [:create]
+  before_filter :init_user_required
   def create
     logout_keeping_session!
     @user = User.new(params[:user].merge(:openid_identifier => session[:openid_identifier]))
@@ -13,6 +13,19 @@ class UsersController < ApplicationController
     else
       flash[:error]  = "We couldn't set up that account, sorry.  Please try again, or contact an admin (link is above)."
       render :action => 'new'
+    end
+  end
+
+  private
+  def init_user_required
+    if logged_in?
+      redirect_to root_url
+      false
+    elsif session[:openid_identifier].blank?
+      redirect_to login_url
+      false
+    else
+      true
     end
   end
 end
